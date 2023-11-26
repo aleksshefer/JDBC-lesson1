@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Задания</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+
+<body>
+
+<div class="container">
+    <table class="table table-dark table-striped">
+
+        <thead>
+
+        <tr>
+            <th scope="col">Наименование задания</th>
+            <th scope="col">Выполнение</th>
+            <th scope="col">Дата создания</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+
+        </thead>
+
+        <tbody>
+        <tr th:each="task : ${tasks}">
+            <td th:text="${task.getTitle()}"></td>
+            <td th:text="${task.getFinished()}"></td>
+            <td th:text="${#temporals.format(task.getCreatedDate(), 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td><a type="button" class="btn btn-primary mb-3"
+                   th:href="@{'/finish?taskId=' + ${task.getId()}}">Finish</a></td>
+            <td>
+                <form action="#" th:action="@{'/delete?taskId=' + ${task.getId()}}" th:method="delete" >
+                    <button type="submit" class="btn btn-primary mb-3">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+
+    </table>
+</div>
+
+<div class="container">
+
+    <form class="row g-3" th:action="@{'/create-form'}">
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary mb-3">Добавить задание</button>
+        </div>
+
+    </form>
+
+</div>
+</body>
+</html>

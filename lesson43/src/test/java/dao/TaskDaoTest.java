@@ -1,7 +1,8 @@
 package dao;
 
 import com.opentable.db.postgres.embedded.EmbeddedPostgres;
-import entity.Task;
+import ru.shefer.dao.TaskDaoImpl;
+import ru.shefer.entity.Task;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +22,7 @@ import org.junit.jupiter.api.TestInstance;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TaskDaoTest {
-    private TaskDao taskDao;
+    private TaskDaoImpl taskDao;
 
     @BeforeAll
     public void setUp() throws IOException {
@@ -31,7 +32,7 @@ class TaskDaoTest {
                 .getPostgresDatabase();
 
         initializeDb(dataSource);
-        taskDao = new TaskDao(dataSource);
+        taskDao = new TaskDaoImpl(dataSource);
     }
 
     @BeforeEach
@@ -40,7 +41,7 @@ class TaskDaoTest {
     }
 
     private void initializeDb(DataSource dataSource) {
-        try (InputStream inputStream = this.getClass().getResource("/initial.sql").openStream()) {
+        try (InputStream inputStream = this.getClass().getResource("/data.sql").openStream()) {
             String sql = new String(inputStream.readAllBytes());
             try (
                     Connection connection = dataSource.getConnection();

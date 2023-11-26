@@ -1,6 +1,7 @@
-package dao;
+package ru.shefer.dao;
 
-import entity.Task;
+import ru.shefer.entity.Task;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,20 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
 
-public class TaskDao {
+@Component
+public class TaskDaoImpl implements TaskDao {
     private final DataSource dataSource;
 
-    public TaskDao(DataSource dataSource) {
+    public TaskDaoImpl(DataSource dataSource) {
+        System.out.println(2222);
         this.dataSource = dataSource;
     }
 
+    @Override
     public Task save(Task task) {
-        // get connection
-        // create statement
-        // set params
-        // execute
-        // get id
-        // set id
+
         String sql = "INSERT INTO task (title, finished, created_date) VALUES (?, ?, ?)";
         try (
                 Connection connection = dataSource.getConnection();
@@ -49,6 +48,7 @@ public class TaskDao {
         return task;
     }
 
+    @Override
     public List<Task> findAll() {
         List<Task> tasks = new ArrayList<>();
         String sql = "SELECT task_id, title, finished, created_date FROM task ORDER BY task_id";
@@ -57,6 +57,7 @@ public class TaskDao {
         return tasks;
     }
 
+    @Override
     public int deleteAll() {
 
         String sql = "WITH deleted AS (DELETE FROM task RETURNING *) SELECT COUNT(*) FROM deleted";
@@ -73,6 +74,7 @@ public class TaskDao {
         return -1;
     }
 
+    @Override
     public Task getById(Integer id) {
         Task resultTask = null;
         String sql = "SELECT * FROM task WHERE task_id = ?";
@@ -100,6 +102,7 @@ public class TaskDao {
         return resultTask;
     }
 
+    @Override
     public List<Task> findAllNotFinished() {
 
         List<Task> tasks = new ArrayList<>();
@@ -108,6 +111,7 @@ public class TaskDao {
         return tasks;
     }
 
+    @Override
     public List<Task> findNewestTasks(Integer numberOfNewestTasks) {
 
         List<Task> tasks = new ArrayList<>();
@@ -135,6 +139,7 @@ public class TaskDao {
         return tasks;
     }
 
+    @Override
     public Task finishTask(Task task) {
 
         String sql = "UPDATE task SET finished = true WHERE task_id = ?";
@@ -153,6 +158,7 @@ public class TaskDao {
         return getById(task.getId());
     }
 
+    @Override
     public void deleteById(Integer id) {
         String sql = "DELETE FROM task WHERE task_id = ?";
         try (
